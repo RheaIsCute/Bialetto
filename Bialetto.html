@@ -1,0 +1,509 @@
+```html
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Café Bialetto - Plan de Negocios Parte 1</title>
+    <!-- Tailwind CSS -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <!-- Google Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400..900;1,400..900&family=Plus+Jakarta+Sans:ital,wght@0,200..800;1,200..800&family=Caveat:wght@700&display=swap" rel="stylesheet">
+    <!-- FontAwesome para Iconos -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+    
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    colors: {
+                        espresso: '#2D1E1B',
+                        cocoa: '#5D4037',
+                        latte: '#A1887F',
+                        cream: '#FAF6F0',
+                        caramel: '#C25B4E',
+                        'rose-pastel': '#FCE4EC',
+                        'green-pastel': '#E8F5E9',
+                        'purple-pastel': '#EDE7F6',
+                        'yellow-pastel': '#FFFDE7',
+                    },
+                    fontFamily: {
+                        title: ['Playfair Display', 'serif'],
+                        body: ['Plus Jakarta Sans', 'sans-serif'],
+                        handwritten: ['Caveat', 'cursive'],
+                    }
+                }
+            }
+        }
+    </script>
+    <style>
+        /* Estilos personalizados para emular hojas físicas o diapositivas */
+        .page-sheet {
+            width: 100%;
+            max-width: 240mm; /* Aumentado para mayor anchura */
+            min-height: 100vh;
+            padding: 2rem 1.5rem;
+            margin: 20px auto;
+            background: linear-gradient(135deg, #ffffff 0%, #FAF6F0 100%);
+            box-shadow: 0 15px 35px rgba(45, 30, 27, 0.1), 0 5px 15px rgba(45, 30, 27, 0.05);
+            border-radius: 12px;
+            position: relative;
+            border: 1px solid rgba(194, 91, 78, 0.2);
+            overflow: hidden;
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
+        }
+
+        @media (min-width: 768px) {
+            .page-sheet {
+                min-height: 297mm;
+                padding: 25mm 20mm;
+            }
+        }
+        
+        .page-sheet:hover {
+            box-shadow: 0 20px 45px rgba(45, 30, 27, 0.15), 0 10px 20px rgba(45, 30, 27, 0.08);
+        }
+
+        .page-sheet::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 6px;
+            background: linear-gradient(90deg, #2D1E1B 0%, #C25B4E 50%, #A1887F 100%);
+        }
+        
+        .slide-frame {
+            width: 100%;
+            max-width: 1100px;
+            height: 620px;
+            aspect-ratio: 16/9;
+        }
+
+        /* Estilo Kraft para la presentación */
+        .bg-kraft-texture {
+            background-color: #F4EBE1;
+            background-image: radial-gradient(rgba(62, 39, 35, 0.04) 1px, transparent 0);
+            background-size: 20px 20px;
+        }
+
+        /* Efecto de cinta adhesiva washi tape */
+        .washi-tape {
+            position: relative;
+        }
+        .washi-tape::before {
+            content: '';
+            position: absolute;
+            top: -12px;
+            left: 30px;
+            width: 90px;
+            height: 24px;
+            background-color: rgba(200, 230, 201, 0.6);
+            transform: rotate(-3deg);
+            border-left: 3px dashed rgba(255,255,255,0.5);
+            border-right: 3px dashed rgba(255,255,255,0.5);
+            box-shadow: 0 2px 5px rgba(0,0,0,0.03);
+            z-index: 10;
+        }
+
+        .washi-tape.pink::before {
+            background-color: rgba(248, 187, 208, 0.6);
+            transform: rotate(2deg);
+        }
+
+        @keyframes float {
+            0%, 100% { transform: translateY(0); }
+            50% { transform: translateY(-5px); }
+        }
+        
+        @keyframes pulse-glow {
+            0%, 100% { box-shadow: 0 0 0 0 rgba(194, 91, 78, 0.4); }
+            50% { box-shadow: 0 0 0 10px rgba(194, 91, 78, 0); }
+        }
+
+        .animate-float {
+            animation: float 3s ease-in-out infinite;
+        }
+
+        .animate-pulse-glow {
+            animation: pulse-glow 2s infinite;
+        }
+        
+        /* Floating background coffee beans */
+        .coffee-particle {
+            position: fixed;
+            color: rgba(93, 64, 55, 0.08);
+            z-index: -1;
+            animation: rise 15s linear infinite;
+            pointer-events: none;
+        }
+        @keyframes rise {
+            0% { transform: translateY(100vh) rotate(0deg); opacity: 0; }
+            10% { opacity: 1; }
+            90% { opacity: 1; }
+            100% { transform: translateY(-20vh) rotate(360deg); opacity: 0; }
+        }
+
+        /* Estilos de impresión para PDF */
+        @media print {
+            body { background: white !important; }
+            header { display: none !important; }
+            main { padding: 0 !important; }
+            .page-sheet { 
+                box-shadow: none !important; 
+                margin: 0 auto !important;
+                border: none !important;
+                max-width: 100% !important;
+                page-break-after: always;
+                min-height: auto !important;
+                padding: 10mm !important;
+                transform: none !important;
+            }
+            .page-sheet::before { display: none !important; }
+            #particles-container { display: none !important; }
+        }
+    </style>
+</head>
+<body class="bg-espresso font-body text-espresso min-height-screen flex flex-col justify-between overflow-x-hidden">
+
+    <!-- BARRA DE CONFIGURACIÓN GLOBAL / NAVEGACIÓN SUPERIOR -->
+    <header class="bg-espresso text-cream border-b border-white/10 py-4 px-6 sticky top-0 z-50 shadow-md">
+        <div class="max-w-7xl mx-auto flex flex-col sm:flex-row justify-between items-center gap-4">
+            <div class="flex items-center gap-3">
+                <div class="w-10 h-10 rounded-full bg-caramel flex items-center justify-center text-white font-title text-xl font-bold shadow-md">B</div>
+                <div>
+                    <h1 class="font-title text-lg font-bold tracking-tight">Café Bialetto</h1>
+                    <p class="text-xs text-latte">Plan de Negocios - Desarrollo Emprendedor</p>
+                </div>
+            </div>
+            
+            <button onclick="window.print()" class="bg-caramel hover:bg-caramel/90 text-white px-5 py-2.5 rounded-full text-sm font-bold shadow-md flex items-center gap-2 transition-all hover:scale-105 active:scale-95">
+                <i class="fa-solid fa-file-pdf"></i>
+                Descargar PDF
+            </button>
+        </div>
+    </header>
+
+    <!-- CONTENEDOR PRINCIPAL -->
+    <main class="flex-grow w-full py-8 px-4 flex flex-col items-center justify-center">
+        
+        <!-- ==================== MODO 1: REPORTE CORPORATIVO (IMPRIMIBLE) ==================== -->
+        <div id="documentContainer" class="w-full max-w-5xl block animate-fade-in">
+            
+            <!-- PÁGINA 1: PORTADA INSTITUCIONAL Y EQUIPO -->
+            <div class="page-sheet relative mb-12">
+                <!-- Membrete obligatorio (Mejorado) -->
+                <div class="flex justify-between items-center border-b-2 border-caramel/30 pb-4 mb-10">
+                    <div class="flex flex-col">
+                        <span class="text-[10px] text-latte font-bold uppercase tracking-widest">Plan de Negocios</span>
+                        <span class="text-xs text-cocoa font-semibold">Desarrollo Emprendedor</span>
+                    </div>
+                    <div class="flex items-center gap-3 bg-gradient-to-r from-cream to-rose-pastel px-5 py-2 rounded-full shadow-sm border border-caramel/10 animate-float cursor-default hover:scale-105 transition-transform duration-300">
+                        <span class="font-title font-black text-espresso text-lg tracking-wide">Café Bialetto</span>
+                        <div class="w-8 h-8 rounded-full bg-gradient-to-br from-caramel to-cocoa text-white flex items-center justify-center shadow-md animate-pulse-glow">
+                            <i class="fa-solid fa-mug-hot text-sm"></i>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="text-center my-16">
+                    <div class="text-6xl text-caramel mb-6"><i class="fa-solid fa-mug-hot"></i></div>
+                    <h2 class="font-title text-5xl font-black tracking-tight text-espresso mb-3">CAFÉ BIALETTO</h2>
+                    <p class="font-handwritten text-3xl text-caramel mb-8">"Buen café para cada momento"</p>
+                    <div class="inline-block bg-green-pastel border border-espresso/20 px-6 py-2 rounded-full text-xs font-bold tracking-widest text-espresso uppercase mb-16">
+                        Plan de Negocios - Parte 1
+                    </div>
+                    <p class="text-xs text-latte font-semibold uppercase tracking-wider">Materia: Desarrollo Emprendedor</p>
+                </div>
+
+                <div class="border-t border-espresso/10 pt-8">
+                    <h3 class="font-title text-2xl font-bold text-espresso mb-6 text-center">Información del Equipo de Trabajo</h3>
+                    
+                    <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                        <div onclick="openModal('dir_general')" class="group border border-caramel/20 p-5 rounded-xl bg-gradient-to-br from-white to-rose-pastel/30 shadow-sm hover:shadow-xl hover:-translate-y-1 transition-all duration-300 cursor-pointer relative overflow-hidden">
+                            <h4 class="font-bold text-lg text-espresso group-hover:text-caramel transition-colors">Santiago Reyes</h4>
+                            <span class="text-xs font-bold text-caramel uppercase tracking-wider"><i class="fa-solid fa-user-tie mr-1"></i> Dirección General</span>
+                            <p class="text-xs text-cocoa mt-2">Coordina las actividades de todo el equipo, supervisa el cumplimiento de objetivos estratégicos y representa formalmente a la empresa ante clientes e inversionistas.</p>
+                            <button class="mt-4 text-[10px] uppercase tracking-widest font-bold text-caramel opacity-0 group-hover:opacity-100 transition-opacity duration-300 flex items-center gap-1">Ver Detalles <i class="fa-solid fa-arrow-right group-hover:translate-x-1 transition-transform"></i></button>
+                        </div>
+
+                        <div onclick="openModal('dir_produccion')" class="group border border-caramel/20 p-5 rounded-xl bg-gradient-to-br from-white to-rose-pastel/30 shadow-sm hover:shadow-xl hover:-translate-y-1 transition-all duration-300 cursor-pointer relative overflow-hidden">
+                            <h4 class="font-bold text-lg text-espresso group-hover:text-caramel transition-colors">Yafel Alcantara</h4>
+                            <span class="text-xs font-bold text-caramel uppercase tracking-wider"><i class="fa-solid fa-mug-hot mr-1"></i> Dirección de Producción</span>
+                            <p class="text-xs text-cocoa mt-2">Supervisa la elaboración del menú de bebidas y repostería artesanal, garantiza la máxima calidad del grano seleccionado y coordina la logística en eventos.</p>
+                            <button class="mt-4 text-[10px] uppercase tracking-widest font-bold text-caramel opacity-0 group-hover:opacity-100 transition-opacity duration-300 flex items-center gap-1">Ver Detalles <i class="fa-solid fa-arrow-right group-hover:translate-x-1 transition-transform"></i></button>
+                        </div>
+
+                        <div onclick="openModal('dir_financiera')" class="group border border-caramel/20 p-5 rounded-xl bg-gradient-to-br from-white to-rose-pastel/30 shadow-sm hover:shadow-xl hover:-translate-y-1 transition-all duration-300 cursor-pointer relative overflow-hidden">
+                            <h4 class="font-bold text-lg text-espresso group-hover:text-caramel transition-colors">Humberto Flores</h4>
+                            <span class="text-xs font-bold text-caramel uppercase tracking-wider"><i class="fa-solid fa-chart-pie mr-1"></i> Dirección Financiera</span>
+                            <p class="text-xs text-cocoa mt-2">Administra los recursos económicos de la empresa, elabora presupuestos específicos para eventos y realiza análisis de costos para la toma de decisiones.</p>
+                            <button class="mt-4 text-[10px] uppercase tracking-widest font-bold text-caramel opacity-0 group-hover:opacity-100 transition-opacity duration-300 flex items-center gap-1">Ver Detalles <i class="fa-solid fa-arrow-right group-hover:translate-x-1 transition-transform"></i></button>
+                        </div>
+
+                        <div onclick="openModal('rh')" class="group border border-caramel/20 p-5 rounded-xl bg-gradient-to-br from-white to-rose-pastel/30 shadow-sm hover:shadow-xl hover:-translate-y-1 transition-all duration-300 cursor-pointer relative overflow-hidden">
+                            <h4 class="font-bold text-lg text-espresso group-hover:text-caramel transition-colors">Valeria Vanessa</h4>
+                            <span class="text-xs font-bold text-caramel uppercase tracking-wider"><i class="fa-solid fa-users mr-1"></i> Recursos Humanos</span>
+                            <p class="text-xs text-cocoa mt-2">Organiza las asignaciones del equipo de trabajo, promueve activamente un clima laboral cooperativo, gestiona los horarios del staff en locaciones y media conflictos.</p>
+                            <button class="mt-4 text-[10px] uppercase tracking-widest font-bold text-caramel opacity-0 group-hover:opacity-100 transition-opacity duration-300 flex items-center gap-1">Ver Detalles <i class="fa-solid fa-arrow-right group-hover:translate-x-1 transition-transform"></i></button>
+                        </div>
+
+                        <div onclick="openModal('dir_marketing')" class="group border border-caramel/20 p-5 rounded-xl bg-gradient-to-br from-white to-rose-pastel/30 shadow-sm hover:shadow-xl hover:-translate-y-1 transition-all duration-300 cursor-pointer relative overflow-hidden">
+                            <h4 class="font-bold text-lg text-espresso group-hover:text-caramel transition-colors">Luis Castro</h4>
+                            <span class="text-xs font-bold text-caramel uppercase tracking-wider"><i class="fa-solid fa-bullhorn mr-1"></i> Dirección de Marketing</span>
+                            <p class="text-xs text-cocoa mt-2">Diseña estrategias de publicidad y relaciones públicas, gestiona los perfiles interactivos en redes sociales y co-crea los paquetes estéticos personalizados.</p>
+                            <button class="mt-4 text-[10px] uppercase tracking-widest font-bold text-caramel opacity-0 group-hover:opacity-100 transition-opacity duration-300 flex items-center gap-1">Ver Detalles <i class="fa-solid fa-arrow-right group-hover:translate-x-1 transition-transform"></i></button>
+                        </div>
+
+                        <div onclick="openModal('dir_ventas')" class="group border border-caramel/20 p-5 rounded-xl bg-gradient-to-br from-white to-rose-pastel/30 shadow-sm hover:shadow-xl hover:-translate-y-1 transition-all duration-300 cursor-pointer relative overflow-hidden">
+                            <h4 class="font-bold text-lg text-espresso group-hover:text-caramel transition-colors">Abigail Ontiveros</h4>
+                            <span class="text-xs font-bold text-caramel uppercase tracking-wider"><i class="fa-solid fa-handshake mr-1"></i> Dirección de Ventas</span>
+                            <p class="text-xs text-cocoa mt-2">Gestiona el primer contacto comercial con prospectos, coordina cotizaciones, da seguimiento a pedidos, evalúa la satisfacción y fomenta convenios.</p>
+                            <button class="mt-4 text-[10px] uppercase tracking-widest font-bold text-caramel opacity-0 group-hover:opacity-100 transition-opacity duration-300 flex items-center gap-1">Ver Detalles <i class="fa-solid fa-arrow-right group-hover:translate-x-1 transition-transform"></i></button>
+                    </div>
+                </div>
+            </div>
+
+            <!-- PÁGINA 2: SEPARADOR Y DESCRIPCIÓN GENERAL DE LA EMPRESA -->
+            <div class="page-sheet relative mb-12">
+                <!-- Membrete obligatorio (Mejorado) -->
+                <div class="flex justify-between items-center border-b-2 border-caramel/30 pb-4 mb-10">
+                    <div class="flex flex-col">
+                        <span class="text-[10px] text-latte font-bold uppercase tracking-widest">Plan de Negocios</span>
+                        <span class="text-xs text-cocoa font-semibold">Desarrollo Emprendedor</span>
+                    </div>
+                    <div class="flex items-center gap-3 bg-gradient-to-r from-cream to-rose-pastel px-5 py-2 rounded-full shadow-sm border border-caramel/10 animate-float cursor-default hover:scale-105 transition-transform duration-300">
+                        <span class="font-title font-black text-espresso text-lg tracking-wide">Café Bialetto</span>
+                        <div class="w-8 h-8 rounded-full bg-gradient-to-br from-caramel to-cocoa text-white flex items-center justify-center shadow-md animate-pulse-glow">
+                            <i class="fa-solid fa-mug-hot text-sm"></i>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Separador de Secciones Exigido -->
+                <div class="bg-gradient-to-r from-espresso to-cocoa text-cream p-12 rounded-xl text-center my-12 shadow-lg relative overflow-hidden">
+                    <h2 class="font-title text-4xl font-extrabold tracking-tight uppercase">Descripción general de la empresa</h2>
+                    <div class="w-16 h-1 bg-caramel mx-auto mt-4"></div>
+                </div>
+
+                <div class="my-16 px-6">
+                    <h3 class="font-title text-2xl font-bold text-espresso mb-6">Visión de Mercado y Cobertura</h3>
+                    <p class="text-base text-cocoa leading-relaxed mb-6">
+                        <strong>Café Bialetto</strong> es una empresa dedicada al ramo de servicios de hospitalidad gastronómica móvil, especializada en el diseño y despliegue de barras móviles de café de especialidad y snacks finos bajo el eslogan corporativo <em>"Buen café para cada momento"</em>. 
+                    </p>
+                    <p class="text-base text-cocoa leading-relaxed mb-6">
+                        Nuestro mercado objetivo primario está compuesto por organizadores de bodas, agencias de relaciones públicas, anfitriones de eventos corporativos, y particulares que buscan una propuesta de valor basada en la hiper-personalización estética y un show en vivo de barismo interactivo.
+                    </p>
+                    <p class="text-base text-cocoa leading-relaxed">
+                        La empresa iniciará formalmente sus operaciones logísticas en el territorio nacional de México (enfocándose prioritariamente en la zona metropolitana del centro del país), comercializando sus paquetes a través de prospección directa B2B y campañas estratégicas digitales para captar mercados de alta gama.
+                    </p>
+                </div>
+            </div>
+
+            <!-- PÁGINA 3: PRODUCTO, MISIÓN, VISIÓN Y VALORES -->
+            <div class="page-sheet relative">
+                <!-- Membrete obligatorio (Mejorado) -->
+                <div class="flex justify-between items-center border-b-2 border-caramel/30 pb-4 mb-10">
+                    <div class="flex flex-col">
+                        <span class="text-[10px] text-latte font-bold uppercase tracking-widest">Plan de Negocios</span>
+                        <span class="text-xs text-cocoa font-semibold">Desarrollo Emprendedor</span>
+                    </div>
+                    <div class="flex items-center gap-3 bg-gradient-to-r from-cream to-rose-pastel px-5 py-2 rounded-full shadow-sm border border-caramel/10 animate-float cursor-default hover:scale-105 transition-transform duration-300">
+                        <span class="font-title font-black text-espresso text-lg tracking-wide">Café Bialetto</span>
+                        <div class="w-8 h-8 rounded-full bg-gradient-to-br from-caramel to-cocoa text-white flex items-center justify-center shadow-md animate-pulse-glow">
+                            <i class="fa-solid fa-mug-hot text-sm"></i>
+                        </div>
+                    </div>
+                </div>
+
+                <h2 class="font-title text-3xl font-extrabold text-espresso mb-8 border-b-2 border-caramel pb-2">Descripción del Producto</h2>
+                
+                <div class="mb-12 text-sm text-cocoa leading-relaxed space-y-4">
+                    <p>
+                        Ofrecemos un servicio premium de <strong>barras de café móviles modulares</strong> que se adaptan de manera flexible a la temática visual del evento del cliente (rústico, elegante, corporativo o minimalista). Servimos bebidas calientes y frías de alta calidad como Espresso, Capuccino, Latte y Chocolate Caliente elaboradas al momento por baristas expertos con café de especialidad mexicano.
+                    </p>
+                    <p>
+                        <strong>Beneficio Clave:</strong> Resolvemos de manera integral el aburrimiento del catering tradicional en bodas y reuniones corporativas mediante un <em>Show de Barismo</em> donde educamos amigablemente al comensal sobre el origen del grano y ejecutamos arte latte en directo.
+                    </p>
+                    <p>
+                        <strong>Diferenciador Exclusivo:</strong> Brindamos un servicio de <em>Branded Packaging</em> (vasos, mangas y servilletas con la marca del cliente) y stencils de grado alimenticio para grabar logotipos, iniciales o marcas corporativas directamente sobre la espuma del café usando cacao fino o canela.
+                    </p>
+                </div>
+
+                <div class="grid grid-cols-1 md:grid-cols-2 gap-8 my-10">
+                    <div onclick="openModal('mision')" class="group border-l-4 border-caramel p-6 rounded-r-xl bg-gradient-to-br from-yellow-pastel/40 to-white shadow-sm hover:shadow-xl hover:scale-105 transition-all duration-300 cursor-pointer">
+                        <h3 class="font-title text-xl font-bold text-espresso mb-3 group-hover:text-caramel transition-colors"><i class="fa-solid fa-bullseye text-caramel group-hover:scale-110 transition-transform"></i> Misión</h3>
+                        <p class="text-xs text-cocoa leading-relaxed">
+                            "Brindar bebidas de café de la más alta calidad y un servicio excepcional, creando experiencias memorables en cada evento que nos eligen."
+                        </p>
+                        <button class="mt-4 text-[10px] uppercase tracking-widest font-bold text-caramel opacity-0 group-hover:opacity-100 transition-opacity duration-300 flex items-center gap-1">Leer más <i class="fa-solid fa-arrow-right group-hover:translate-x-1 transition-transform"></i></button>
+                    </div>
+
+                    <div onclick="openModal('vision')" class="group border-l-4 border-espresso p-6 rounded-r-xl bg-gradient-to-br from-green-pastel/40 to-white shadow-sm hover:shadow-xl hover:scale-105 transition-all duration-300 cursor-pointer">
+                        <h3 class="font-title text-xl font-bold text-espresso mb-3 group-hover:text-caramel transition-colors"><i class="fa-solid fa-eye text-caramel group-hover:scale-110 transition-transform"></i> Visión</h3>
+                        <p class="text-xs text-cocoa leading-relaxed">
+                            "Ser la barra de café más reconocida y preferida por nuestra calidad, creatividad y compromiso con cada cliente."
+                        </p>
+                        <button class="mt-4 text-[10px] uppercase tracking-widest font-bold text-caramel opacity-0 group-hover:opacity-100 transition-opacity duration-300 flex items-center gap-1">Leer más <i class="fa-solid fa-arrow-right group-hover:translate-x-1 transition-transform"></i></button>
+                    </div>
+                </div>
+
+                <div>
+                    <h3 class="font-title text-2xl font-bold text-espresso mb-4">Valores Fundamentales</h3>
+                    <ul class="space-y-3 text-xs text-cocoa">
+                        <li><i class="fa-solid fa-star text-caramel mr-1"></i> <strong>Calidad:</strong> Selección rigurosa de granos de especialidad y procesos operativos pulcros.</li>
+                        <li><i class="fa-solid fa-handshake-angle text-caramel mr-1"></i> <strong>Respeto:</strong> Trato digno, honesto y empático hacia colaboradores, proveedores y clientes.</li>
+                        <li><i class="fa-solid fa-lightbulb text-caramel mr-1"></i> <strong>Innovación:</strong> Reinvención en el diseño de nuestras barras, tecnología de stencils y recetas exclusivas.</li>
+                        <li><i class="fa-solid fa-heart text-caramel mr-1"></i> <strong>Pasión:</strong> Amor y dedicación total en el arte de preparar café de especialidad para cada invitado.</li>
+                        <li><i class="fa-solid fa-clock text-caramel mr-1"></i> <strong>Compromiso:</strong> Cumplimiento estricto de tiempos de montaje y un esquema de cero desperdicio de insumos.</li>
+                    </ul>
+                </div>
+            </div>
+
+        </div>
+
+    <!-- Background Particles -->
+    <div id="particles-container"></div>
+
+    <!-- Global Modal -->
+    <div id="infoModal" class="fixed inset-0 z-[100] hidden items-center justify-center bg-espresso/80 backdrop-blur-md transition-opacity duration-300 opacity-0 px-4">
+        <div class="bg-cream rounded-2xl max-w-lg w-full p-8 shadow-2xl transform scale-95 transition-transform duration-300" id="modalContentBox">
+            <div class="flex justify-between items-center mb-6">
+                <div class="flex items-center gap-3">
+                    <div id="modalIcon" class="w-10 h-10 rounded-full bg-gradient-to-br from-caramel to-cocoa text-white flex items-center justify-center shadow-md">
+                        <i class="fa-solid fa-info text-lg"></i>
+                    </div>
+                    <h3 id="modalTitle" class="font-title text-2xl font-bold text-espresso">Título</h3>
+                </div>
+                <button onclick="closeModal()" class="text-cocoa hover:text-caramel transition-colors p-2 focus:outline-none">
+                    <i class="fa-solid fa-xmark text-xl"></i>
+                </button>
+            </div>
+            <div id="modalBody" class="text-sm text-cocoa leading-relaxed space-y-4 max-h-[60vh] overflow-y-auto pr-2 custom-scrollbar">
+                <!-- Content injected via JS -->
+            </div>
+            <div class="mt-8 flex justify-end">
+                <button onclick="closeModal()" class="bg-gradient-to-r from-espresso to-cocoa text-cream px-6 py-2 rounded-full font-bold text-xs uppercase tracking-widest shadow-md hover:shadow-lg hover:-translate-y-1 transition-all duration-300">
+                    Regresar
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <style>
+        .custom-scrollbar::-webkit-scrollbar { width: 6px; }
+        .custom-scrollbar::-webkit-scrollbar-track { background: rgba(93,64,55,0.1); border-radius: 10px; }
+        .custom-scrollbar::-webkit-scrollbar-thumb { background: rgba(194,91,78,0.5); border-radius: 10px; }
+        .custom-scrollbar::-webkit-scrollbar-thumb:hover { background: rgba(194,91,78,0.8); }
+    </style>
+
+    <script>
+        const modalData = {
+            dir_general: {
+                title: "Dirección General",
+                icon: "fa-user-tie",
+                content: "<p><strong>Responsabilidades clave:</strong></p><ul class='list-disc pl-5 mt-2 space-y-2'><li>Definir la visión y dirección estratégica a largo plazo de Café Bialetto.</li><li>Representar a la marca ante inversionistas, socios comerciales y clientes clave.</li><li>Supervisar el desempeño de todos los departamentos y asegurar que los objetivos comerciales se cumplan.</li><li>Tomar decisiones ejecutivas sobre expansión de mercado y nuevas líneas de negocio.</li></ul><p class='mt-4 italic text-xs border-l-2 border-caramel pl-3'>El liderazgo es fundamental para mantener la esencia de la marca mientras escalamos a eventos más grandes y exclusivos.</p>"
+            },
+            dir_produccion: {
+                title: "Dirección de Producción",
+                icon: "fa-mug-hot",
+                content: "<p><strong>Responsabilidades clave:</strong></p><ul class='list-disc pl-5 mt-2 space-y-2'><li>Garantizar que cada bebida cumpla con nuestros rigurosos estándares de calidad.</li><li>Seleccionar proveedores de café de especialidad e insumos premium.</li><li>Diseñar e innovar en el menú de temporada y opciones de arte latte personalizado.</li><li>Coordinar el equipo de baristas durante eventos masivos para asegurar eficiencia sin perder la atención al detalle.</li></ul><p class='mt-4 italic text-xs border-l-2 border-caramel pl-3'>La magia sucede en la barra; esta dirección asegura que el espectáculo del barismo sea perfecto.</p>"
+            },
+            dir_financiera: {
+                title: "Dirección Financiera",
+                icon: "fa-chart-pie",
+                content: "<p><strong>Responsabilidades clave:</strong></p><ul class='list-disc pl-5 mt-2 space-y-2'><li>Administrar los flujos de efectivo y el capital de trabajo.</li><li>Proyectar estados financieros y calcular la rentabilidad de paquetes de eventos.</li><li>Controlar estrictamente los egresos para maximizar los márgenes operativos.</li><li>Buscar fuentes de financiamiento para expandir nuestra flotilla de barras móviles.</li></ul><p class='mt-4 italic text-xs border-l-2 border-caramel pl-3'>Cada grano cuenta. Una buena salud financiera nos permite ofrecer precios competitivos sin comprometer la calidad premium.</p>"
+            },
+            rh: {
+                title: "Recursos Humanos",
+                icon: "fa-users",
+                content: "<p><strong>Responsabilidades clave:</strong></p><ul class='list-disc pl-5 mt-2 space-y-2'><li>Reclutar, seleccionar y capacitar a baristas y personal de apoyo.</li><li>Gestionar nóminas, compensaciones y horarios rotativos para eventos de fin de semana.</li><li>Fomentar una cultura organizacional cálida y colaborativa, reflejo de nuestra hospitalidad.</li><li>Resolver conflictos internos y asegurar un ambiente de trabajo seguro y dinámico.</li></ul><p class='mt-4 italic text-xs border-l-2 border-caramel pl-3'>Nuestro equipo es la cara de Bialetto; cuidamos de ellos para que ellos cuiden de nuestros clientes.</p>"
+            },
+            dir_marketing: {
+                title: "Dirección de Marketing",
+                icon: "fa-bullhorn",
+                content: "<p><strong>Responsabilidades clave:</strong></p><ul class='list-disc pl-5 mt-2 space-y-2'><li>Desarrollar campañas publicitarias en plataformas digitales (Instagram, TikTok).</li><li>Diseñar la estética visual de nuestras barras móviles (Branded Packaging).</li><li>Posicionar la marca en nichos de bodas y eventos corporativos de lujo.</li><li>Analizar métricas de alcance y conversión para optimizar la inversión publicitaria.</li></ul><p class='mt-4 italic text-xs border-l-2 border-caramel pl-3'>No solo vendemos café, vendemos una experiencia estética. El marketing asegura que esa experiencia se perciba desde antes del primer sorbo.</p>"
+            },
+            dir_ventas: {
+                title: "Dirección de Ventas",
+                icon: "fa-handshake",
+                content: "<p><strong>Responsabilidades clave:</strong></p><ul class='list-disc pl-5 mt-2 space-y-2'><li>Prospectar nuevos clientes B2B (agencias, wedding planners, empresas).</li><li>Cerrar contratos y negociar volúmenes para eventos de gran escala.</li><li>Ofrecer un excelente servicio post-venta para fidelizar clientes.</li><li>Diseñar promociones y alianzas estratégicas para penetrar nuevos mercados.</li></ul><p class='mt-4 italic text-xs border-l-2 border-caramel pl-3'>Las ventas son el motor de crecimiento. Nos aseguramos de que cada cotización refleje el verdadero valor de nuestro servicio premium.</p>"
+            },
+            mision: {
+                title: "Nuestra Misión",
+                icon: "fa-bullseye",
+                content: "<p class='text-base leading-relaxed'>Nuestra misión va más allá de servir café; se trata de transformar un momento cotidiano en una <strong>experiencia multisensorial</strong>.</p><br><p class='leading-relaxed'>Nos comprometemos a utilizar exclusivamente granos de especialidad de origen ético, apoyando a productores locales mientras brindamos a nuestros clientes corporativos y particulares un espectáculo visual y gastronómico que eleva el estándar de cualquier evento.</p><br><p class='mt-4 italic text-xs border-l-2 border-caramel pl-3 font-bold'>El café es el medio; la hospitalidad y la sonrisa son el fin.</p>"
+            },
+            vision: {
+                title: "Nuestra Visión",
+                icon: "fa-eye",
+                content: "<p class='text-base leading-relaxed'>Para el año 2028, nos visualizamos como la <strong>empresa líder en servicios de barras de café móviles en todo México</strong>.</p><br><p class='leading-relaxed'>Planeamos expandir nuestro modelo a un formato de franquicias de hospitalidad móvil, innovando constantemente con tecnología aplicada al arte latte (impresión 3D sobre espuma) y estableciendo el estándar de oro en catering interactivo para eventos de talla internacional.</p>"
+            }
+        };
+
+        const modal = document.getElementById('infoModal');
+        const modalContentBox = document.getElementById('modalContentBox');
+        
+        function openModal(key) {
+            const data = modalData[key];
+            if (!data) return;
+            
+            document.getElementById('modalTitle').innerHTML = data.title;
+            document.getElementById('modalIcon').innerHTML = `<i class="fa-solid ${data.icon} text-lg"></i>`;
+            document.getElementById('modalBody').innerHTML = data.content;
+            
+            modal.classList.remove('hidden');
+            modal.classList.add('flex');
+            
+            // Trigger reflow for transition
+            setTimeout(() => {
+                modal.classList.remove('opacity-0');
+                modalContentBox.classList.remove('scale-95');
+                modalContentBox.classList.add('scale-100');
+            }, 10);
+        }
+
+        function closeModal() {
+            modal.classList.add('opacity-0');
+            modalContentBox.classList.remove('scale-100');
+            modalContentBox.classList.add('scale-95');
+            
+            setTimeout(() => {
+                modal.classList.add('hidden');
+                modal.classList.remove('flex');
+            }, 300);
+        }
+
+        // Close on click outside
+        modal.addEventListener('click', (e) => {
+            if (e.target === modal) {
+                closeModal();
+            }
+        });
+
+        // Background floating coffee beans logic
+        function initParticles() {
+            const container = document.getElementById('particles-container');
+            const icons = ['fa-seedling', 'fa-leaf', 'fa-circle'];
+            const numParticles = 15;
+            
+            for (let i = 0; i < numParticles; i++) {
+                const particle = document.createElement('i');
+                const randomIcon = icons[Math.floor(Math.random() * icons.length)];
+                particle.className = `fa-solid ${randomIcon} coffee-particle`;
+                particle.style.left = `${Math.random() * 100}vw`;
+                particle.style.animationDelay = `${Math.random() * 15}s`;
+                particle.style.fontSize = `${Math.random() * 1.5 + 0.5}rem`;
+                container.appendChild(particle);
+            }
+        }
+        
+        window.addEventListener('DOMContentLoaded', initParticles);
+    </script>
+</body>
+</html>
+
+```
